@@ -5,10 +5,15 @@
 # <bitbar.author>Bruce Steedman</bitbar.author>
 # <bitbar.author.github>MatzFan</bitbar.author.github>
 # <bitbar.desc>Displays country flag emoji - e.g. for VPN use</bitbar.desc>
+# <bitbar.image>http://s24.postimg.org/wu8glnryt/flag.png</bitbar.image>
 # <bitbar.dependencies>OS X 10.11</bitbar.dependencies>
 
 require 'open-uri'
+require 'json'
 
-country_code = open('http://ipinfo.io/country').string.chomp.split ''
-c1, c2 = *country_code.map { |c| (c.ord + 0x65).chr.force_encoding 'UTF-8' }
+ip_hash = JSON.parse open('http://ipinfo.io').read
+code = ip_hash['country']
+c1, c2 = *code.split('').map { |c| (c.ord + 0x65).chr.force_encoding 'UTF-8' }
 puts "\xF0\x9F\x87#{c1}\xF0\x9F\x87#{c2}"
+puts '---'
+ip_hash.map { |k,v| puts "#{k}: #{v}" }
